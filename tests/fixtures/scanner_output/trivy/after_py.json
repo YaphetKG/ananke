@@ -1,0 +1,29 @@
+{
+  "SchemaVersion": 2,
+  "Trivy": {
+    "Version": "0.76.2"
+  },
+  "ReportID": "019a7a00-0000-7000-8000-faf3a336c91f",
+  "CreatedAt": "2026-11-12T19:05:00.000000000Z",
+  "ArtifactName": ".",
+  "ArtifactType": "filesystem",
+  "Metadata": {
+    "ImageConfig": {
+      "architecture": "",
+      "created": "0001-01-01T00:00:00Z",
+      "os": "",
+      "rootfs": {
+        "type": "",
+        "diff_ids": null
+      },
+      "config": {}
+    }
+  },
+  "Results": [
+    {
+      "Target": "uv.lock",
+      "Class": "lang-pkgs",
+      "Type": "uv"
+    }
+  ]
+}

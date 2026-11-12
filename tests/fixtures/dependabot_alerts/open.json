@@ -1,0 +1,931 @@
+[
+  {
+    "number": 6,
+    "state": "open",
+    "dependency": {
+      "package": {
+        "ecosystem": "npm",
+        "name": "lodash.template"
+      },
+      "manifest_path": "package.json",
+      "version_requirement": "4.5.0",
+      "scope": "runtime",
+      "relationship": "direct"
+    },
+    "security_advisory": {
+      "ghsa_id": "GHSA-35jh-r3h4-6jhm",
+      "cve_id": "CVE-2021-23337",
+      "summary": "Command Injection in lodash",
+      "description": "`lodash` versions prior to 4.17.21 are vulnerable to Command Injection via the template function.",
+      "vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "lodash"
+          },
+          "severity": "high",
+          "vulnerable_version_range": "< 4.17.21",
+          "first_patched_version": {
+            "identifier": "4.17.21"
+          }
+        },
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "lodash-es"
+          },
+          "severity": "high",
+          "vulnerable_version_range": "< 4.17.21",
+          "first_patched_version": {
+            "identifier": "4.17.21"
+          }
+        },
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "lodash.template"
+          },
+          "severity": "high",
+          "vulnerable_version_range": "<= 4.5.0",
+          "first_patched_version": null
+        },
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "lodash-template"
+          },
+          "severity": "high",
+          "vulnerable_version_range": "<= 1.0.0",
+          "first_patched_version": null
+        }
+      ],
+      "severity": "high",
+      "classification": "general",
+      "cvss_severities": {
+        "cvss_v3": {
+          "vector_string": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+          "score": 7.2
+        },
+        "cvss_v4": {
+          "vector_string": null,
+          "score": 0.0
+        }
+      },
+      "epss": {
+        "percentage": 0.20158,
+        "percentile": 0.9748
+      },
+      "cwes": [
+        {
+          "cwe_id": "CWE-77",
+          "name": "Improper Neutralization of Special Elements used in a Command"
+        },
+        {
+          "cwe_id": "CWE-94",
+          "name": "Improper Control of Generation of Code"
+        }
+      ],
+      "identifiers": [
+        {
+          "value": "GHSA-35jh-r3h4-6jhm",
+          "type": "GHSA"
+        },
+        {
+          "value": "CVE-2021-23337",
+          "type": "CVE"
+        }
+      ],
+      "references": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-23337"
+        },
+        {
+          "url": "https://github.com/lodash/lodash/commit/3469357cff396a26c363f8c1b5a91dde28ba4b1c"
+        },
+        {
+          "url": "https://snyk.io/vuln/SNYK-JS-LODASH-1040724"
+        },
+        {
+          "url": "https://github.com/lodash/lodash/blob/ddfd9b11a0126db2302cb70ec9973b66baec0975/lodash.js#L14851"
+        },
+        {
+          "url": "https://snyk.io/vuln/SNYK-JAVA-ORGFUJIONWEBJARS-1074932"
+        },
+        {
+          "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARS-1074930"
+        },
+        {
+          "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSBOWER-1074928"
+        },
+        {
+          "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSBOWERGITHUBLODASH-1074931"
+        },
+        {
+          "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSNPM-1074929"
+        },
+        {
+          "url": "https://www.oracle.com//security-alerts/cpujul2021.html"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuoct2021.html"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpujan2022.html"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpujul2022.html"
+        },
+        {
+          "url": "https://cert-portal.siemens.com/productcert/pdf/ssa-637483.pdf"
+        },
+        {
+          "url": "https://security.netapp.com/advisory/ntap-20210312-0006"
+        },
+        {
+          "url": "https://github.com/rubysec/ruby-advisory-db/blob/master/gems/lodash-rails/CVE-2021-23337.yml"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-35jh-r3h4-6jhm"
+        }
+      ],
+      "published_at": "2021-05-06T16:05:51Z",
+      "updated_at": "2025-08-12T21:44:25Z",
+      "withdrawn_at": null
+    },
+    "security_vulnerability": {
+      "package": {
+        "ecosystem": "npm",
+        "name": "lodash.template"
+      },
+      "severity": "high",
+      "vulnerable_version_range": "<= 4.5.0",
+      "first_patched_version": null
+    },
+    "url": "https://api.github.com/repos/RENCI/example-repo/dependabot/alerts/6",
+    "html_url": "https://github.com/RENCI/example-repo/security/dependabot/6",
+    "created_at": "2026-10-02T14:11:09Z",
+    "updated_at": "2026-10-02T14:11:09Z",
+    "dismissed_at": null,
+    "dismissed_by": null,
+    "dismissed_reason": null,
+    "dismissed_comment": null,
+    "fixed_at": null,
+    "auto_dismissed_at": null,
+    "assignees": []
+  },
+  {
+    "number": 5,
+    "state": "open",
+    "dependency": {
+      "package": {
+        "ecosystem": "npm",
+        "name": "lodash"
+      },
+      "manifest_path": "package.json",
+      "version_requirement": "4.17.15",
+      "scope": "runtime",
+      "relationship": "direct"
+    },
+    "security_advisory": {
+      "ghsa_id": "GHSA-35jh-r3h4-6jhm",
+      "cve_id": "CVE-2021-23337",
+      "summary": "Command Injection in lodash",
+      "description": "`lodash` versions prior to 4.17.21 are vulnerable to Command Injection via the template function.",
+      "vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "lodash"
+          },
+          "severity": "high",
+          "vulnerable_version_range": "< 4.17.21",
+          "first_patched_version": {
+            "identifier": "4.17.21"
+          }
+        },
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "lodash-es"
+          },
+          "severity": "high",
+          "vulnerable_version_range": "< 4.17.21",
+          "first_patched_version": {
+            "identifier": "4.17.21"
+          }
+        },
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "lodash.template"
+          },
+          "severity": "high",
+          "vulnerable_version_range": "<= 4.5.0",
+          "first_patched_version": null
+        },
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "lodash-template"
+          },
+          "severity": "high",
+          "vulnerable_version_range": "<= 1.0.0",
+          "first_patched_version": null
+        }
+      ],
+      "severity": "high",
+      "classification": "general",
+      "cvss_severities": {
+        "cvss_v3": {
+          "vector_string": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+          "score": 7.2
+        },
+        "cvss_v4": {
+          "vector_string": null,
+          "score": 0.0
+        }
+      },
+      "epss": {
+        "percentage": 0.20158,
+        "percentile": 0.9748
+      },
+      "cwes": [
+        {
+          "cwe_id": "CWE-77",
+          "name": "Improper Neutralization of Special Elements used in a Command"
+        },
+        {
+          "cwe_id": "CWE-94",
+          "name": "Improper Control of Generation of Code"
+        }
+      ],
+      "identifiers": [
+        {
+          "value": "GHSA-35jh-r3h4-6jhm",
+          "type": "GHSA"
+        },
+        {
+          "value": "CVE-2021-23337",
+          "type": "CVE"
+        }
+      ],
+      "references": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-23337"
+        },
+        {
+          "url": "https://github.com/lodash/lodash/commit/3469357cff396a26c363f8c1b5a91dde28ba4b1c"
+        },
+        {
+          "url": "https://snyk.io/vuln/SNYK-JS-LODASH-1040724"
+        },
+        {
+          "url": "https://github.com/lodash/lodash/blob/ddfd9b11a0126db2302cb70ec9973b66baec0975/lodash.js#L14851"
+        },
+        {
+          "url": "https://snyk.io/vuln/SNYK-JAVA-ORGFUJIONWEBJARS-1074932"
+        },
+        {
+          "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARS-1074930"
+        },
+        {
+          "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSBOWER-1074928"
+        },
+        {
+          "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSBOWERGITHUBLODASH-1074931"
+        },
+        {
+          "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSNPM-1074929"
+        },
+        {
+          "url": "https://www.oracle.com//security-alerts/cpujul2021.html"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuoct2021.html"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpujan2022.html"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpujul2022.html"
+        },
+        {
+          "url": "https://cert-portal.siemens.com/productcert/pdf/ssa-637483.pdf"
+        },
+        {
+          "url": "https://security.netapp.com/advisory/ntap-20210312-0006"
+        },
+        {
+          "url": "https://github.com/rubysec/ruby-advisory-db/blob/master/gems/lodash-rails/CVE-2021-23337.yml"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-35jh-r3h4-6jhm"
+        }
+      ],
+      "published_at": "2021-05-06T16:05:51Z",
+      "updated_at": "2025-08-12T21:44:25Z",
+      "withdrawn_at": null
+    },
+    "security_vulnerability": {
+      "package": {
+        "ecosystem": "npm",
+        "name": "lodash"
+      },
+      "severity": "high",
+      "vulnerable_version_range": "< 4.17.21",
+      "first_patched_version": {
+        "identifier": "4.17.21"
+      }
+    },
+    "url": "https://api.github.com/repos/RENCI/example-repo/dependabot/alerts/5",
+    "html_url": "https://github.com/RENCI/example-repo/security/dependabot/5",
+    "created_at": "2026-10-02T14:11:08Z",
+    "updated_at": "2026-10-02T14:11:08Z",
+    "dismissed_at": null,
+    "dismissed_by": null,
+    "dismissed_reason": null,
+    "dismissed_comment": null,
+    "fixed_at": null,
+    "auto_dismissed_at": null,
+    "assignees": []
+  },
+  {
+    "number": 4,
+    "state": "open",
+    "dependency": {
+      "package": {
+        "ecosystem": "npm",
+        "name": "lodash"
+      },
+      "manifest_path": "package.json",
+      "version_requirement": "4.17.15",
+      "scope": "runtime",
+      "relationship": "direct"
+    },
+    "security_advisory": {
+      "ghsa_id": "GHSA-p6mc-m468-83gw",
+      "cve_id": "CVE-2020-8203",
+      "summary": "Prototype Pollution in lodash",
+      "description": "Versions of lodash prior to 4.17.19 are vulnerable to Prototype Pollution. The functions `pick`, `set`, `setWith`, `update`, `updateWith`, and `zipObjectDeep` allow a malicious user to modify the prototype of Object if the property identifiers are user-supplied. Being affected by this issue requires manipulating objects based on user-provided property values or arrays.\n\nThis vulnerability causes the addition or modification of an existing property that will exist on all objects and may lead to Denial of Service or Code Execution under specific circumstances.",
+      "vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "lodash"
+          },
+          "severity": "high",
+          "vulnerable_version_range": ">= 3.7.0, < 4.17.19",
+          "first_patched_version": {
+            "identifier": "4.17.19"
+          }
+        },
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "lodash-es"
+          },
+          "severity": "high",
+          "vulnerable_version_range": ">= 3.7.0, < 4.17.20",
+          "first_patched_version": {
+            "identifier": "4.17.20"
+          }
+        },
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "lodash.pick"
+          },
+          "severity": "high",
+          "vulnerable_version_range": ">= 4.0.0, <= 4.4.0",
+          "first_patched_version": null
+        },
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "lodash.set"
+          },
+          "severity": "high",
+          "vulnerable_version_range": ">= 3.7.0, <= 4.3.2",
+          "first_patched_version": null
+        },
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "lodash.setwith"
+          },
+          "severity": "high",
+          "vulnerable_version_range": "<= 4.3.2",
+          "first_patched_version": null
+        },
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "lodash.update"
+          },
+          "severity": "high",
+          "vulnerable_version_range": "<= 4.10.2",
+          "first_patched_version": null
+        },
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "lodash.updatewith"
+          },
+          "severity": "high",
+          "vulnerable_version_range": "<= 4.10.2",
+          "first_patched_version": null
+        }
+      ],
+      "severity": "high",
+      "classification": "general",
+      "cvss_severities": {
+        "cvss_v3": {
+          "vector_string": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:H",
+          "score": 7.4
+        },
+        "cvss_v4": {
+          "vector_string": null,
+          "score": 0.0
+        }
+      },
+      "epss": {
+        "percentage": 0.05213,
+        "percentile": 0.92501
+      },
+      "cwes": [
+        {
+          "cwe_id": "CWE-770",
+          "name": "Allocation of Resources Without Limits or Throttling"
+        },
+        {
+          "cwe_id": "CWE-1321",
+          "name": "Improperly Controlled Modification of Object Prototype Attributes"
+        }
+      ],
+      "identifiers": [
+        {
+          "value": "GHSA-p6mc-m468-83gw",
+          "type": "GHSA"
+        },
+        {
+          "value": "CVE-2020-8203",
+          "type": "CVE"
+        }
+      ],
+      "references": [
+        {
+          "url": "https://github.com/lodash/lodash/issues/4744"
+        },
+        {
+          "url": "https://github.com/lodash/lodash/commit/c84fe82760fb2d3e03a63379b297a1cc1a2fce12"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-8203"
+        },
+        {
+          "url": "https://hackerone.com/reports/712065"
+        },
+        {
+          "url": "https://github.com/lodash/lodash/issues/4874"
+        },
+        {
+          "url": "https://github.com/github/advisory-database/pull/2884"
+        },
+        {
+          "url": "https://hackerone.com/reports/864701"
+        },
+        {
+          "url": "https://github.com/lodash/lodash/wiki/Changelog#v41719"
+        },
+        {
+          "url": "https://web.archive.org/web/20210914001339/https://github.com/lodash/lodash/issues/4744"
+        },
+        {
+          "url": "https://security.netapp.com/advisory/ntap-20200724-0006"
+        },
+        {
+          "url": "https://github.com/rubysec/ruby-advisory-db/blob/master/gems/lodash-rails/CVE-2020-8203.yml"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-p6mc-m468-83gw"
+        }
+      ],
+      "published_at": "2020-07-15T19:15:48Z",
+      "updated_at": "2025-08-12T21:43:40Z",
+      "withdrawn_at": null
+    },
+    "security_vulnerability": {
+      "package": {
+        "ecosystem": "npm",
+        "name": "lodash"
+      },
+      "severity": "high",
+      "vulnerable_version_range": ">= 3.7.0, < 4.17.19",
+      "first_patched_version": {
+        "identifier": "4.17.19"
+      }
+    },
+    "url": "https://api.github.com/repos/RENCI/example-repo/dependabot/alerts/4",
+    "html_url": "https://github.com/RENCI/example-repo/security/dependabot/4",
+    "created_at": "2026-10-02T14:11:08Z",
+    "updated_at": "2026-10-02T14:11:08Z",
+    "dismissed_at": null,
+    "dismissed_by": null,
+    "dismissed_reason": null,
+    "dismissed_comment": null,
+    "fixed_at": null,
+    "auto_dismissed_at": null,
+    "assignees": []
+  },
+  {
+    "number": 3,
+    "state": "open",
+    "dependency": {
+      "package": {
+        "ecosystem": "pip",
+        "name": "urllib3"
+      },
+      "manifest_path": "requirements.txt",
+      "version_requirement": "==1.26.5",
+      "scope": "runtime",
+      "relationship": "direct"
+    },
+    "security_advisory": {
+      "ghsa_id": "GHSA-34jh-p97f-mpxf",
+      "cve_id": "CVE-2024-37891",
+      "summary": "urllib3's Proxy-Authorization request header isn't stripped during cross-origin redirects",
+      "description": "When using urllib3's proxy support with `ProxyManager`, the `Proxy-Authorization` header is only sent to the configured proxy, as expected.\n\nHowever, when sending HTTP requests *without* using urllib3's proxy support, it's possible to accidentally configure the `Proxy-Authorization` header even though it won't have any effect as the request is not using a forwarding proxy or a tunneling proxy. In those cases, urllib3 doesn't treat the `Proxy-Authorization` HTTP header as one carrying authentication material and thus doesn't strip the header on cross-origin redirects.\n\nBecause this is a highly unlikely scenario, we believe the severity of this vulnerability is low for almost all users. Out of an abundance of caution urllib3 will automatically strip the `Proxy-Authorization` header during cross-origin redirects to avoid the small chance that users are doing this on accident.\n\nUsers should use urllib3's proxy support or disable automatic redirects to achieve safe processing of the `Proxy-Authorization` header, but we still decided to strip the header by default in order to further protect users who aren't using the correct approach.\n\n## Affected usages\n\nWe believe the number of usages affected by this advisory is low. It requires all of the following to be true to be exploited:\n\n* Setting the `Proxy-Authorization` header without using urllib3's built-in proxy support.\n* Not disabling HTTP redirects.\n* Either not using an HTTPS origin server or for the proxy or target origin to redirect to a malicious origin.\n\n## Remediation\n\n* Using the `Proxy-Authorization` header with urllib3's `ProxyManager`.\n* Disabling HTTP redirects using `redirects=False` when sending requests.\n* Not using the `Proxy-Authorization` header.",
+      "vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "pip",
+            "name": "urllib3"
+          },
+          "severity": "medium",
+          "vulnerable_version_range": "< 1.26.19",
+          "first_patched_version": {
+            "identifier": "1.26.19"
+          }
+        },
+        {
+          "package": {
+            "ecosystem": "pip",
+            "name": "urllib3"
+          },
+          "severity": "medium",
+          "vulnerable_version_range": ">= 2.0.0, < 2.2.2",
+          "first_patched_version": {
+            "identifier": "2.2.2"
+          }
+        }
+      ],
+      "severity": "medium",
+      "classification": "general",
+      "cvss_severities": {
+        "cvss_v3": {
+          "vector_string": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:N/A:N",
+          "score": 4.4
+        },
+        "cvss_v4": {
+          "vector_string": null,
+          "score": 0.0
+        }
+      },
+      "epss": {
+        "percentage": 0.01141,
+        "percentile": 0.66538
+      },
+      "cwes": [
+        {
+          "cwe_id": "CWE-669",
+          "name": "Incorrect Resource Transfer Between Spheres"
+        }
+      ],
+      "identifiers": [
+        {
+          "value": "GHSA-34jh-p97f-mpxf",
+          "type": "GHSA"
+        },
+        {
+          "value": "CVE-2024-37891",
+          "type": "CVE"
+        }
+      ],
+      "references": [
+        {
+          "url": "https://github.com/urllib3/urllib3/security/advisories/GHSA-34jh-p97f-mpxf"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-37891"
+        },
+        {
+          "url": "https://github.com/urllib3/urllib3/commit/40b6d1605814dd1db0a46e202d6e56f2e4c9a468"
+        },
+        {
+          "url": "https://github.com/urllib3/urllib3/commit/accff72ecc2f6cf5a76d9570198a93ac7c90270e"
+        },
+        {
+          "url": "https://lists.debian.org/debian-lts-announce/2024/12/msg00020.html"
+        },
+        {
+          "url": "https://security.netapp.com/advisory/ntap-20240822-0003"
+        },
+        {
+          "url": "https://www.vicarius.io/vsociety/posts/proxy-authorization-header-handling-vulnerability-in-urllib3-cve-2024-37891"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-34jh-p97f-mpxf"
+        }
+      ],
+      "published_at": "2024-06-17T21:37:20Z",
+      "updated_at": "2025-11-04T16:50:52Z",
+      "withdrawn_at": null
+    },
+    "security_vulnerability": {
+      "package": {
+        "ecosystem": "pip",
+        "name": "urllib3"
+      },
+      "severity": "medium",
+      "vulnerable_version_range": "< 1.26.19",
+      "first_patched_version": {
+        "identifier": "1.26.19"
+      }
+    },
+    "url": "https://api.github.com/repos/RENCI/example-repo/dependabot/alerts/3",
+    "html_url": "https://github.com/RENCI/example-repo/security/dependabot/3",
+    "created_at": "2026-10-01T09:30:41Z",
+    "updated_at": "2026-10-01T09:30:41Z",
+    "dismissed_at": null,
+    "dismissed_by": null,
+    "dismissed_reason": null,
+    "dismissed_comment": null,
+    "fixed_at": null,
+    "auto_dismissed_at": null,
+    "assignees": []
+  },
+  {
+    "number": 2,
+    "state": "open",
+    "dependency": {
+      "package": {
+        "ecosystem": "pip",
+        "name": "urllib3"
+      },
+      "manifest_path": "requirements.txt",
+      "version_requirement": "==1.26.5",
+      "scope": "runtime",
+      "relationship": "direct"
+    },
+    "security_advisory": {
+      "ghsa_id": "GHSA-v845-jxx5-vc9f",
+      "cve_id": "CVE-2023-43804",
+      "summary": "`Cookie` HTTP header isn't stripped on cross-origin redirects",
+      "description": "urllib3 doesn't treat the `Cookie` HTTP header special or provide any helpers for managing cookies over HTTP, that is the responsibility of the user. However, it is possible for a user to specify a `Cookie` header and unknowingly leak information via HTTP redirects to a different origin if that user doesn't disable redirects explicitly.\n\nUsers **must** handle redirects themselves instead of relying on urllib3's automatic redirects to achieve safe processing of the `Cookie` header, thus we decided to strip the header by default in order to further protect users who aren't using the correct approach.\n\n## Affected usages\n\nWe believe the number of usages affected by this advisory is low. It requires all of the following to be true to be exploited:\n\n* Using an affected version of urllib3 (patched in v1.26.17 and v2.0.6)\n* Using the `Cookie` header on requests, which is mostly typical for impersonating a browser.\n* Not disabling HTTP redirects\n* Either not using HTTPS or for the origin server to redirect to a malicious origin.\n\n## Remediation\n\n* Upgrading to at least urllib3 v1.26.17 or v2.0.6\n* Disabling HTTP redirects using `redirects=False` when sending requests.\n* Not using the `Cookie` header.",
+      "vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "pip",
+            "name": "urllib3"
+          },
+          "severity": "high",
+          "vulnerable_version_range": ">= 2.0.0, < 2.0.6",
+          "first_patched_version": {
+            "identifier": "2.0.6"
+          }
+        },
+        {
+          "package": {
+            "ecosystem": "pip",
+            "name": "urllib3"
+          },
+          "severity": "high",
+          "vulnerable_version_range": "< 1.26.17",
+          "first_patched_version": {
+            "identifier": "1.26.17"
+          }
+        }
+      ],
+      "severity": "high",
+      "classification": "general",
+      "cvss_severities": {
+        "cvss_v3": {
+          "vector_string": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:H/A:N",
+          "score": 5.9
+        },
+        "cvss_v4": {
+          "vector_string": "CVSS:4.0/AV:N/AC:L/AT:P/PR:H/UI:N/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N",
+          "score": 7.4
+        }
+      },
+      "epss": {
+        "percentage": 0.0136,
+        "percentile": 0.71516
+      },
+      "cwes": [
+        {
+          "cwe_id": "CWE-200",
+          "name": "Exposure of Sensitive Information to an Unauthorized Actor"
+        }
+      ],
+      "identifiers": [
+        {
+          "value": "GHSA-v845-jxx5-vc9f",
+          "type": "GHSA"
+        },
+        {
+          "value": "CVE-2023-43804",
+          "type": "CVE"
+        }
+      ],
+      "references": [
+        {
+          "url": "https://github.com/urllib3/urllib3/security/advisories/GHSA-v845-jxx5-vc9f"
+        },
+        {
+          "url": "https://github.com/urllib3/urllib3/commit/01220354d389cd05474713f8c982d05c9b17aafb"
+        },
+        {
+          "url": "https://github.com/urllib3/urllib3/commit/644124ecd0b6e417c527191f866daa05a5a2056d"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-43804"
+        },
+        {
+          "url": "https://lists.debian.org/debian-lts-announce/2023/10/msg00012.html"
+        },
+        {
+          "url": "https://github.com/pypa/advisory-database/tree/main/vulns/urllib3/PYSEC-2023-192.yaml"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/5F5CUBAN5XMEBVBZPHFITBLMJV5FIJJ5"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/I3PR7C6RJ6JUBQKIJ644DMIJSUP36VDY"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/NDAGZXYJ7H2G3SB47M453VQVNAWKAEJJ"
+        },
+        {
+          "url": "https://security.netapp.com/advisory/ntap-20241213-0007"
+        },
+        {
+          "url": "https://www.vicarius.io/vsociety/posts/cve-2023-43804-urllib3-vulnerability-3"
+        },
+        {
+          "url": "https://lists.debian.org/debian-lts-announce/2024/12/msg00020.html"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-v845-jxx5-vc9f"
+        }
+      ],
+      "published_at": "2023-10-02T23:27:05Z",
+      "updated_at": "2025-11-04T16:45:51Z",
+      "withdrawn_at": null
+    },
+    "security_vulnerability": {
+      "package": {
+        "ecosystem": "pip",
+        "name": "urllib3"
+      },
+      "severity": "high",
+      "vulnerable_version_range": "< 1.26.17",
+      "first_patched_version": {
+        "identifier": "1.26.17"
+      }
+    },
+    "url": "https://api.github.com/repos/RENCI/example-repo/dependabot/alerts/2",
+    "html_url": "https://github.com/RENCI/example-repo/security/dependabot/2",
+    "created_at": "2026-10-01T09:30:41Z",
+    "updated_at": "2026-10-01T09:30:41Z",
+    "dismissed_at": null,
+    "dismissed_by": null,
+    "dismissed_reason": null,
+    "dismissed_comment": null,
+    "fixed_at": null,
+    "auto_dismissed_at": null,
+    "assignees": []
+  },
+  {
+    "number": 1,
+    "state": "open",
+    "dependency": {
+      "package": {
+        "ecosystem": "pip",
+        "name": "requests"
+      },
+      "manifest_path": "requirements.txt",
+      "version_requirement": "==2.25.1",
+      "scope": "runtime",
+      "relationship": "direct"
+    },
+    "security_advisory": {
+      "ghsa_id": "GHSA-j8r2-6x86-q33q",
+      "cve_id": "CVE-2023-32681",
+      "summary": "Unintended leak of Proxy-Authorization header in requests",
+      "description": "### Impact\n\nSince Requests v2.3.0, Requests has been vulnerable to potentially leaking `Proxy-Authorization` headers to destination servers, specifically during redirects to an HTTPS origin. This is a product of how `rebuild_proxies` is used to recompute and [reattach the `Proxy-Authorization` header](https://github.com/psf/requests/blob/f2629e9e3c7ce3c3c8c025bcd8db551101cbc773/requests/sessions.py#L319-L328) to requests when redirected. Note this behavior has _only_ been observed to affect proxied requests when credentials are supplied in the URL user information component (e.g. `https://username:password@proxy:8080`).\n\n**Current vulnerable behavior(s):**\n\n1. HTTP → HTTPS: **leak**\n2. HTTPS → HTTP: **no leak**\n3. HTTPS → HTTPS: **leak**\n4. HTTP → HTTP: **no leak**\n\nFor HTTP connections sent through the proxy, the proxy will identify the header in the request itself and remove it prior to forwarding to the destination server. However when sent over HTTPS, the `Proxy-Authorization` header must be sent in the CONNECT request as the proxy has no visibility into further tunneled requests. This results in Requests forwarding the header to the destination server unintentionally, allowing a malicious actor to potentially exfiltrate those credentials.\n\nThe reason this currently works for HTTPS connections in Requests is the `Proxy-Authorization` header is also handled by urllib3 with our usage of the ProxyManager in adapters.py with [`proxy_manager_for`](https://github.com/psf/requests/blob/f2629e9e3c7ce3c3c8c025bcd8db551101cbc773/requests/adapters.py#L199-L235). This will compute the required proxy headers in `proxy_headers` and pass them to the Proxy Manager, avoiding attaching them directly to the Request object. This will be our preferred option going forward for default usage.\n\n### Patches\nStarting in Requests v2.31.0, Requests will no longer attach this header to redirects with an HTTPS destination. This should have no negative impacts on the default behavior of the library as the proxy credentials are already properly being handled by urllib3's ProxyManager.\n\nFor users with custom adapters, this _may_ be potentially breaking if you were already working around this behavior. The previous functionality of `rebuild_proxies` doesn't make sense in any case, so we would encourage any users impacted to migrate any handling of Proxy-Authorization directly into their custom adapter.\n\n### Workarounds\nFor users who are not able to update Requests immediately, there is one potential workaround.\n\nYou may disable redirects by setting `allow_redirects` to `False` on all calls through Requests top-level APIs. Note that if you're currently relying on redirect behaviors, you will need to capture the 3xx response codes and ensure a new request is made to the redirect destination.\n```\nimport requests\nr = requests.get('http://github.com/', allow_redirects=False)\n```\n\n### Credits\n\nThis vulnerability was discovered and disclosed by the following individuals.\n\nDennis Brinkrolf, Haxolot (https://haxolot.com/)\nTobias Funke, (tobiasfunke93@gmail.com)",
+      "vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "pip",
+            "name": "requests"
+          },
+          "severity": "medium",
+          "vulnerable_version_range": ">= 2.3.0, < 2.31.0",
+          "first_patched_version": {
+            "identifier": "2.31.0"
+          }
+        }
+      ],
+      "severity": "medium",
+      "classification": "general",
+      "cvss_severities": {
+        "cvss_v3": {
+          "vector_string": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:N/A:N",
+          "score": 6.1
+        },
+        "cvss_v4": {
+          "vector_string": null,
+          "score": 0.0
+        }
+      },
+      "epss": {
+        "percentage": 0.02974,
+        "percentile": 0.8652
+      },
+      "cwes": [
+        {
+          "cwe_id": "CWE-200",
+          "name": "Exposure of Sensitive Information to an Unauthorized Actor"
+        }
+      ],
+      "identifiers": [
+        {
+          "value": "GHSA-j8r2-6x86-q33q",
+          "type": "GHSA"
+        },
+        {
+          "value": "CVE-2023-32681",
+          "type": "CVE"
+        }
+      ],
+      "references": [
+        {
+          "url": "https://github.com/psf/requests/security/advisories/GHSA-j8r2-6x86-q33q"
+        },
+        {
+          "url": "https://github.com/psf/requests/commit/74ea7cf7a6a27a4eeb2ae24e162bcc942a6706d5"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-32681"
+        },
+        {
+          "url": "https://github.com/psf/requests/releases/tag/v2.31.0"
+        },
+        {
+          "url": "https://github.com/pypa/advisory-database/tree/main/vulns/requests/PYSEC-2023-74.yaml"
+        },
+        {
+          "url": "https://lists.debian.org/debian-lts-announce/2023/06/msg00018.html"
+        },
+        {
+          "url": "https://security.gentoo.org/glsa/202309-08"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/AW7HNFGYP44RT3DUDQXG2QT3OEV2PJ7Y"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/KOYASTZDGQG2BWLSNBPL3TQRL2G7QYNZ"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-j8r2-6x86-q33q"
+        }
+      ],
+      "published_at": "2023-05-22T20:36:32Z",
+      "updated_at": "2024-03-27T20:09:55Z",
+      "withdrawn_at": null
+    },
+    "security_vulnerability": {
+      "package": {
+        "ecosystem": "pip",
+        "name": "requests"
+      },
+      "severity": "medium",
+      "vulnerable_version_range": ">= 2.3.0, < 2.31.0",
+      "first_patched_version": {
+        "identifier": "2.31.0"
+      }
+    },
+    "url": "https://api.github.com/repos/RENCI/example-repo/dependabot/alerts/1",
+    "html_url": "https://github.com/RENCI/example-repo/security/dependabot/1",
+    "created_at": "2026-10-01T09:30:40Z",
+    "updated_at": "2026-10-01T09:30:40Z",
+    "dismissed_at": null,
+    "dismissed_by": null,
+    "dismissed_reason": null,
+    "dismissed_comment": null,
+    "fixed_at": null,
+    "auto_dismissed_at": null,
+    "assignees": []
+  }
+]

@@ -1,0 +1,60 @@
+repos:
+  - RENCI/example-repo
+  - RENCI/another-repo
+sources: [github_dependabot, local_sweep]  # github_code_scanning in M5
+scanners:
+  enabled: [trivy, osv, gitleaks]           # order = row order in the PR's proof-of-work table
+  sweep_interval_s: 86400                   # local_sweep cadence for repos without Dependabot; 0 disables
+  max_db_age_days: 7
+  trivy:
+    scanners: [vuln, misconfig, secret]
+    ignore_unfixed: true
+    image_mode: false                       # M5: trivy image on built images
+  osv:
+    offline: true
+  gitleaks: {}
+polling:
+  interval_s: 600
+workspace:
+  root: ~/ananke-workspaces                # ~ and $VAR expanded; relative to this file otherwise
+agent:
+  model: claude-opus-5-5
+  effort: high
+  max_concurrent: 3
+  max_concurrent_per_repo: 1
+  max_turns: 40
+  max_attempts: 3
+  max_retry_backoff_s: 300
+  stall_timeout_s: 600
+  run_timeout_s: 3600
+  token_budget_per_run: 2000000
+  daily_token_budget: 20000000
+  summarization: false
+policy:
+  min_severity: medium
+  require_fixed_version: true
+  regression_severity: high                # fail verify if any scanner introduces findings at/above this
+  grouping: per_manifest                   # per_manifest | per_package | per_repo
+  ignore_paths: ["docs/**", "examples/**"]
+  dependabot_prs: supersede                # adopt | ignore | supersede
+  auto_merge:
+    enabled: false
+    max_bump: patch                        # patch | minor
+    min_severity: high
+  failure_issue: true
+  declined_cooldown_days: 7
+github:
+  app_id: $ANANKE_GH_APP_ID
+  installation_id: $ANANKE_GH_INSTALLATION_ID
+  private_key_path: $ANANKE_GH_PRIVATE_KEY_PATH
+sandbox:
+  image: ghcr.io/renci/ananke-worker:latest
+  network_allowlist: [pypi.org, files.pythonhosted.org, registry.npmjs.org, proxy.golang.org, github.com, api.github.com, objects.githubusercontent.com]
+  cpu: 2
+  memory: 4g
+  scanner_db_volume: ~/ananke-scanner-db   # Trivy/OSV DBs, refreshed daily by the daemon, mounted read-only
+notify:
+  slack_webhook: $ANANKE_SLACK_WEBHOOK     # optional
+server:
+  port: 0                                  # 0 = disabled; binds 127.0.0.1
+live_model: false                          # must be true AND ANANKE_LIVE_MODEL=1 AND --live

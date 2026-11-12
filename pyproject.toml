@@ -1,0 +1,61 @@
+[project]
+name = "ananke"
+version = "0.1.0"
+description = "Symphony-style security patching agent: turns security findings into mergeable PRs with proof of work."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "langchain>=1.0,<2",
+    "langchain-core>=1.0,<2",
+    "langgraph>=1.0,<2",
+    "langsmith>=0.3",
+    "deepagents==0.7.36",
+    "langchain-anthropic>=1.0",
+    "typer>=0.12",
+    "pydantic>=2",
+    "pyyaml>=6",
+    "jinja2>=3.1",
+    "httpx>=0.27",
+    "PyJWT[crypto]>=2.8",
+    "packaging>=24",
+    "rich>=13",
+    "aiosqlite>=0.20",
+]
+
+[project.scripts]
+ananke = "ananke.cli:app"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "pytest-asyncio>=0.24",
+    "respx>=0.21",
+    "ruff>=0.6",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ananke"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests/unit", "tests/integration", "tests/live"]
+norecursedirs = ["tests/fixtures", ".*", "build", "dist", "node_modules"]
+markers = [
+    "docker: needs a reachable Docker daemon",
+    "binaries: needs scanner binaries (trivy, osv-scanner, gitleaks) on PATH",
+    "live: needs GitHub credentials and/or the live model; never run by default",
+]
+addopts = '-m "not docker and not binaries and not live"'
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["tests/fixtures"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

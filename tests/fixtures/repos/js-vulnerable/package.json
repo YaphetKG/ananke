@@ -1,0 +1,12 @@
+{
+  "name": "js-vulnerable",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Ananke test fixture: a tiny npm project pinning a known-vulnerable lodash.",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "lodash": "4.17.15"
+  }
+}

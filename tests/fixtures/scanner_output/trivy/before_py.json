@@ -1,0 +1,293 @@
+{
+  "SchemaVersion": 2,
+  "Trivy": {
+    "Version": "0.76.2"
+  },
+  "ReportID": "019a7a00-0000-7000-8000-d14b2f80df99",
+  "CreatedAt": "2026-11-12T19:00:00.000000000Z",
+  "ArtifactName": ".",
+  "ArtifactType": "filesystem",
+  "Metadata": {
+    "ImageConfig": {
+      "architecture": "",
+      "created": "0001-01-01T00:00:00Z",
+      "os": "",
+      "rootfs": {
+        "type": "",
+        "diff_ids": null
+      },
+      "config": {}
+    }
+  },
+  "Results": [
+    {
+      "Target": "uv.lock",
+      "Class": "lang-pkgs",
+      "Type": "uv",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2023-32681",
+          "VendorIDs": [
+            "GHSA-j8r2-6x86-q33q"
+          ],
+          "PkgID": "requests@2.25.1",
+          "PkgName": "requests",
+          "PkgIdentifier": {
+            "PURL": "pkg:pypi/requests@2.25.1",
+            "UID": "1f85cbd98cee1273"
+          },
+          "InstalledVersion": "2.25.1",
+          "FixedVersion": "2.31.0",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2023-32681",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory pip",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+          },
+          "Fingerprint": "sha256:4635b0916e86b3b0365799caa5edc8b27e4d35fc006efab7f4b39dc416db1c8b",
+          "Title": "Unintended leak of Proxy-Authorization header in requests",
+          "Description": "### Impact\n\nSince Requests v2.3.0, Requests has been vulnerable to potentially leaking `Proxy-Authorization` headers to destination servers, specifically during redirects to an HTTPS origin. This is a product of how `rebuild_proxies` is used to recompute and [reattach the `Proxy-Authorization` header](https://github.com/psf/requests/blob/f2629e9e3c7ce3c3c8c025bcd8db551101cbc773/requests/sessions.py#L319-L328) to requests when redirected. Note this behavior has _only_ been observed to affect proxied requests when credentials are supplied in the URL user information component (e.g. `https://username:password@proxy:8080`).\n\n**Current vulnerable behavior(s):**\n\n1. HTTP → HTTPS: **leak**\n2. HTTPS → HTTP: **no leak**\n3. HTTPS → HTTPS: **leak**\n4. HTTP → HTTP: **no leak**\n\nFor HTTP connections sent through the proxy, the proxy will identify the header in the request itself and remove it prior to forwarding to the destination server. However when sent over HTTPS, the `Proxy-Authorization` header must be sent in the CONNECT request as the proxy has no visibility into further tunneled requests. This results in Requests forwarding the header to the destination server unintentionally, allowing a malicious actor to potentially exfiltrate those credentials.\n\nThe reason this currently works for HTTPS connections in Requests is the `Proxy-Authorization` header is also handled by urllib3 with our usage of the ProxyManager in adapters.py with [`proxy_manager_for`](https://github.com/psf/requests/blob/f2629e9e3c7ce3c3c8c025bcd8db551101cbc773/requests/adapters.py#L199-L235). This will compute the required proxy headers in `proxy_headers` and pass them to the Proxy Manager, avoiding attaching them directly to the Request object. This will be our preferred option going forward for default usage.\n\n### Patches\nStarting in Requests v2.31.0, Requests will no longer attach this header to redirects with an HTTPS destination. This should have no negative impacts on the default behavior of the library as the proxy credentials are already properly being handled by urllib3's ProxyManager.\n\nFor users with custom adapters, this _may_ be potentially breaking if you were already working around this behavior. The previous functionality of `rebuild_proxies` doesn't make sense in any case, so we would encourage any users impacted to migrate any handling of Proxy-Authorization directly into their custom adapter.\n\n### Workarounds\nFor users who are not able to update Requests immediately, there is one potential workaround.\n\nYou may disable redirects by setting `allow_redirects` to `False` on all calls through Requests top-level APIs. Note that if you're currently relying on redirect behaviors, you will need to capture the 3xx response codes and ensure a new request is made to the redirect destination.\n```\nimport requests\nr = requests.get('http://github.com/', allow_redirects=False)\n```\n\n### Credits\n\nThis vulnerability was discovered and disclosed by the following individuals.\n\nDennis Brinkrolf, Haxolot (https://haxolot.com/)\nTobias Funke, (tobiasfunke93@gmail.com)",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-200"
+          ],
+          "VendorSeverity": {
+            "ghsa": 2
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:N/A:N",
+              "V3Score": 6.1
+            }
+          },
+          "References": [
+            "https://github.com/psf/requests/security/advisories/GHSA-j8r2-6x86-q33q",
+            "https://github.com/psf/requests/commit/74ea7cf7a6a27a4eeb2ae24e162bcc942a6706d5",
+            "https://nvd.nist.gov/vuln/detail/CVE-2023-32681",
+            "https://github.com/psf/requests/releases/tag/v2.31.0",
+            "https://github.com/pypa/advisory-database/tree/main/vulns/requests/PYSEC-2023-74.yaml",
+            "https://lists.debian.org/debian-lts-announce/2023/06/msg00018.html",
+            "https://security.gentoo.org/glsa/202309-08",
+            "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/AW7HNFGYP44RT3DUDQXG2QT3OEV2PJ7Y",
+            "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/KOYASTZDGQG2BWLSNBPL3TQRL2G7QYNZ",
+            "https://github.com/advisories/GHSA-j8r2-6x86-q33q"
+          ],
+          "PublishedDate": "2023-05-26T18:15:14Z",
+          "LastModifiedDate": "2024-03-27T20:09:55Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2024-35195",
+          "VendorIDs": [
+            "GHSA-9wx4-h78v-vm56"
+          ],
+          "PkgID": "requests@2.25.1",
+          "PkgName": "requests",
+          "PkgIdentifier": {
+            "PURL": "pkg:pypi/requests@2.25.1",
+            "UID": "1f85cbd98cee1273"
+          },
+          "InstalledVersion": "2.25.1",
+          "FixedVersion": "2.32.0",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-35195",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory pip",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+          },
+          "Fingerprint": "sha256:5114203a7f9b86189324d8a620c1df58bf2f19cfba0acca99b1909d152b12153",
+          "Title": "Requests `Session` object does not verify requests after making first request with verify=False",
+          "Description": "When using a `requests.Session`, if the first request to a given origin is made with `verify=False`, TLS certificate verification may remain disabled for all subsequent requests to that origin, even if `verify=True` is explicitly specified later.\n\nThis occurs because the underlying connection is reused from the session's connection pool, causing the initial TLS verification setting to persist for the lifetime of the pooled connection. As a result, applications may unintentionally send requests without certificate verification, leading to potential man-in-the-middle attacks and compromised confidentiality or integrity.\n\nThis behavior affects versions of `requests` prior to 2.32.0.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-670"
+          ],
+          "VendorSeverity": {
+            "ghsa": 2
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:H/PR:H/UI:R/S:U/C:H/I:H/A:N",
+              "V3Score": 5.6
+            }
+          },
+          "References": [
+            "https://github.com/psf/requests/security/advisories/GHSA-9wx4-h78v-vm56",
+            "https://github.com/psf/requests/pull/6655",
+            "https://github.com/psf/requests/commit/a58d7f2ffb4d00b46dca2d70a3932a0b37e22fac",
+            "https://nvd.nist.gov/vuln/detail/CVE-2024-35195",
+            "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/IYLSNK5TL46Q6XPRVMHVWS63MVJQOK4Q",
+            "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/N7WP6EYDSUOCOJYHDK5NX43PYZ4SNHGZ",
+            "https://github.com/advisories/GHSA-9wx4-h78v-vm56"
+          ],
+          "PublishedDate": "2024-05-20T21:15:09Z",
+          "LastModifiedDate": "2026-01-16T00:02:51Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2023-43804",
+          "VendorIDs": [
+            "GHSA-v845-jxx5-vc9f"
+          ],
+          "PkgID": "urllib3@1.26.5",
+          "PkgName": "urllib3",
+          "PkgIdentifier": {
+            "PURL": "pkg:pypi/urllib3@1.26.5",
+            "UID": "341c0102aae6b99c"
+          },
+          "InstalledVersion": "1.26.5",
+          "FixedVersion": "2.0.6, 1.26.17",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2023-43804",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory pip",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+          },
+          "Fingerprint": "sha256:8b91c5ac61c2eae3828f92a6a4d95efe68fc93be3ba8fd80047c3637e07b9d25",
+          "Title": "`Cookie` HTTP header isn't stripped on cross-origin redirects",
+          "Description": "urllib3 doesn't treat the `Cookie` HTTP header special or provide any helpers for managing cookies over HTTP, that is the responsibility of the user. However, it is possible for a user to specify a `Cookie` header and unknowingly leak information via HTTP redirects to a different origin if that user doesn't disable redirects explicitly.\n\nUsers **must** handle redirects themselves instead of relying on urllib3's automatic redirects to achieve safe processing of the `Cookie` header, thus we decided to strip the header by default in order to further protect users who aren't using the correct approach.\n\n## Affected usages\n\nWe believe the number of usages affected by this advisory is low. It requires all of the following to be true to be exploited:\n\n* Using an affected version of urllib3 (patched in v1.26.17 and v2.0.6)\n* Using the `Cookie` header on requests, which is mostly typical for impersonating a browser.\n* Not disabling HTTP redirects\n* Either not using HTTPS or for the origin server to redirect to a malicious origin.\n\n## Remediation\n\n* Upgrading to at least urllib3 v1.26.17 or v2.0.6\n* Disabling HTTP redirects using `redirects=False` when sending requests.\n* Not using the `Cookie` header.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-200"
+          ],
+          "VendorSeverity": {
+            "ghsa": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:H/A:N",
+              "V3Score": 5.9
+            }
+          },
+          "References": [
+            "https://github.com/urllib3/urllib3/security/advisories/GHSA-v845-jxx5-vc9f",
+            "https://github.com/urllib3/urllib3/commit/01220354d389cd05474713f8c982d05c9b17aafb",
+            "https://github.com/urllib3/urllib3/commit/644124ecd0b6e417c527191f866daa05a5a2056d",
+            "https://nvd.nist.gov/vuln/detail/CVE-2023-43804",
+            "https://lists.debian.org/debian-lts-announce/2023/10/msg00012.html",
+            "https://github.com/pypa/advisory-database/tree/main/vulns/urllib3/PYSEC-2023-192.yaml",
+            "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/5F5CUBAN5XMEBVBZPHFITBLMJV5FIJJ5",
+            "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/I3PR7C6RJ6JUBQKIJ644DMIJSUP36VDY",
+            "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/NDAGZXYJ7H2G3SB47M453VQVNAWKAEJJ",
+            "https://security.netapp.com/advisory/ntap-20241213-0007",
+            "https://www.vicarius.io/vsociety/posts/cve-2023-43804-urllib3-vulnerability-3",
+            "https://lists.debian.org/debian-lts-announce/2024/12/msg00020.html",
+            "https://github.com/advisories/GHSA-v845-jxx5-vc9f"
+          ],
+          "PublishedDate": "2023-10-04T17:15:10Z",
+          "LastModifiedDate": "2025-11-04T16:45:51Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2023-45803",
+          "VendorIDs": [
+            "GHSA-g4mx-q9vg-27p4"
+          ],
+          "PkgID": "urllib3@1.26.5",
+          "PkgName": "urllib3",
+          "PkgIdentifier": {
+            "PURL": "pkg:pypi/urllib3@1.26.5",
+            "UID": "341c0102aae6b99c"
+          },
+          "InstalledVersion": "1.26.5",
+          "FixedVersion": "2.0.7, 1.26.18",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2023-45803",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory pip",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+          },
+          "Fingerprint": "sha256:f894a0bbe4c8bdae0d8c0dfceed09aeda1b8762606d619431e50c13c7037d2a2",
+          "Title": "urllib3's request body not stripped after redirect from 303 status changes request method to GET",
+          "Description": "urllib3 previously wouldn't remove the HTTP request body when an HTTP redirect response using status 303 \"See Other\" after the request had its method changed from one that could accept a request body (like `POST`) to `GET` as is required by HTTP RFCs. Although the behavior of removing the request body is not specified in the section for redirects, it can be inferred by piecing together information from different sections and we have observed the behavior in other major HTTP client implementations like curl and web browsers.\n\nFrom [RFC 9110 Section 9.3.1](https://www.rfc-editor.org/rfc/rfc9110.html#name-get):\n\n> A client SHOULD NOT generate content in a GET request unless it is made directly to an origin server that has previously indicated, in or out of band, that such a request has a purpose and will be adequately supported.\n\n## Affected usages\n\nBecause the vulnerability requires a previously trusted service to become compromised in order to have an impact on confidentiality we believe the exploitability of this vulnerability is low. Additionally, many users aren't putting sensitive data in HTTP request bodies, if this is the case then this vulnerability isn't exploitable.\n\nBoth of the following conditions must be true to be affected by this vulnerability:\n\n* If you're using urllib3 and submitting sensitive information in the HTTP request body (such as form data or JSON)\n* The origin service is compromised and starts redirecting using 303 to a malicious peer or the redirected-to service becomes compromised.\n\n## Remediation\n\nYou can remediate this vulnerability with any of the following steps:\n\n* Upgrade to a patched version of urllib3 (v1.26.18 or v2.0.7)\n* Disable redirects for services that you aren't expecting to respond with redirects with `redirects=False`.\n* Disable automatic redirects with `redirects=False` and handle 303 redirects manually by stripping the HTTP request body.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-200"
+          ],
+          "VendorSeverity": {
+            "ghsa": 2
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:A/AC:H/PR:H/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 4.2
+            }
+          },
+          "References": [
+            "https://github.com/urllib3/urllib3/security/advisories/GHSA-g4mx-q9vg-27p4",
+            "https://github.com/urllib3/urllib3/commit/4e50fbc5db74e32cabd5ccc1ab81fc103adfe0b3",
+            "https://github.com/urllib3/urllib3/commit/b594c5ceaca38e1ac215f916538fb128e3526a36",
+            "https://github.com/urllib3/urllib3/releases/tag/1.26.18",
+            "https://github.com/urllib3/urllib3/releases/tag/2.0.7",
+            "https://nvd.nist.gov/vuln/detail/CVE-2023-45803",
+            "https://github.com/urllib3/urllib3/commit/4e98d57809dacab1cbe625fddeec1a290c478ea9",
+            "https://www.rfc-editor.org/rfc/rfc9110.html#name-get",
+            "https://github.com/pypa/advisory-database/tree/main/vulns/urllib3/PYSEC-2023-212.yaml",
+            "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/4R2Y5XK3WALSR3FNAGN7JBYV2B343ZKB",
+            "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/5F5CUBAN5XMEBVBZPHFITBLMJV5FIJJ5",
+            "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/PPDPLM6UUMN55ESPQWJFLLIZY4ZKCNRX",
+            "https://lists.debian.org/debian-lts-announce/2024/12/msg00020.html",
+            "https://github.com/advisories/GHSA-g4mx-q9vg-27p4"
+          ],
+          "PublishedDate": "2023-10-17T20:15:10Z",
+          "LastModifiedDate": "2025-11-04T16:46:23Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2024-37891",
+          "VendorIDs": [
+            "GHSA-34jh-p97f-mpxf"
+          ],
+          "PkgID": "urllib3@1.26.5",
+          "PkgName": "urllib3",
+          "PkgIdentifier": {
+            "PURL": "pkg:pypi/urllib3@1.26.5",
+            "UID": "341c0102aae6b99c"
+          },
+          "InstalledVersion": "1.26.5",
+          "FixedVersion": "1.26.19, 2.2.2",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-37891",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory pip",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+          },
+          "Fingerprint": "sha256:ad65760efe0f3fe6f8e41d54fb9cdd1edfb59a25427db1e0201f9d1643ce717c",
+          "Title": "urllib3's Proxy-Authorization request header isn't stripped during cross-origin redirects",
+          "Description": "When using urllib3's proxy support with `ProxyManager`, the `Proxy-Authorization` header is only sent to the configured proxy, as expected.\n\nHowever, when sending HTTP requests *without* using urllib3's proxy support, it's possible to accidentally configure the `Proxy-Authorization` header even though it won't have any effect as the request is not using a forwarding proxy or a tunneling proxy. In those cases, urllib3 doesn't treat the `Proxy-Authorization` HTTP header as one carrying authentication material and thus doesn't strip the header on cross-origin redirects.\n\nBecause this is a highly unlikely scenario, we believe the severity of this vulnerability is low for almost all users. Out of an abundance of caution urllib3 will automatically strip the `Proxy-Authorization` header during cross-origin redirects to avoid the small chance that users are doing this on accident.\n\nUsers should use urllib3's proxy support or disable automatic redirects to achieve safe processing of the `Proxy-Authorization` header, but we still decided to strip the header by default in order to further protect users who aren't using the correct approach.\n\n## Affected usages\n\nWe believe the number of usages affected by this advisory is low. It requires all of the following to be true to be exploited:\n\n* Setting the `Proxy-Authorization` header without using urllib3's built-in proxy support.\n* Not disabling HTTP redirects.\n* Either not using an HTTPS origin server or for the proxy or target origin to redirect to a malicious origin.\n\n## Remediation\n\n* Using the `Proxy-Authorization` header with urllib3's `ProxyManager`.\n* Disabling HTTP redirects using `redirects=False` when sending requests.\n* Not using the `Proxy-Authorization` header.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-669"
+          ],
+          "VendorSeverity": {
+            "ghsa": 2
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 4.4
+            }
+          },
+          "References": [
+            "https://github.com/urllib3/urllib3/security/advisories/GHSA-34jh-p97f-mpxf",
+            "https://nvd.nist.gov/vuln/detail/CVE-2024-37891",
+            "https://github.com/urllib3/urllib3/commit/40b6d1605814dd1db0a46e202d6e56f2e4c9a468",
+            "https://github.com/urllib3/urllib3/commit/accff72ecc2f6cf5a76d9570198a93ac7c90270e",
+            "https://lists.debian.org/debian-lts-announce/2024/12/msg00020.html",
+            "https://security.netapp.com/advisory/ntap-20240822-0003",
+            "https://www.vicarius.io/vsociety/posts/proxy-authorization-header-handling-vulnerability-in-urllib3-cve-2024-37891",
+            "https://github.com/advisories/GHSA-34jh-p97f-mpxf"
+          ],
+          "PublishedDate": "2024-06-17T20:15:13Z",
+          "LastModifiedDate": "2025-11-04T16:50:52Z"
+        }
+      ]
+    }
+  ]
+}
