@@ -49,6 +49,7 @@ class ScanReport(BaseModel):
     scanner: str
     scanner_version: str = "unknown"
     db_version: str | None = None
+    db_updated_at: datetime | None = None
     ran_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     targets: list[str] = Field(default_factory=list)
     findings: list[ScanFinding] = Field(default_factory=list)

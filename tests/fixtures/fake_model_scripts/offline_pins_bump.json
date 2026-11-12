@@ -1,0 +1,28 @@
+[
+  {"tool_calls": [{"name": "read_file", "args": {"file_path": "/pins.cfg"}}]},
+  {
+    "tool_calls": [
+      {
+        "name": "edit_file",
+        "args": {"file_path": "/pins.cfg", "old_string": "badlib==1.0.0", "new_string": "badlib==9.9.9"}
+      }
+    ]
+  },
+  {"tool_calls": [{"name": "run_command", "args": {"cmd": "python -c \"print('tests ok')\""}}]},
+  {"tool_calls": [{"name": "scan_workspace", "args": {}}]},
+  {
+    "tool_calls": [
+      {
+        "name": "report_result",
+        "args": {
+          "status": "patched",
+          "summary": "Bumped badlib 1.0.0 -> 9.9.9 in pins.cfg, which the deterministic fixer does not edit.",
+          "changes": ["pins.cfg: badlib==1.0.0 -> badlib==9.9.9"],
+          "risk_notes": "Major version bump; the offline test suite passes.",
+          "tests": "python -c \"print('tests ok')\": passed"
+        }
+      }
+    ]
+  },
+  {"content": "done"}
+]

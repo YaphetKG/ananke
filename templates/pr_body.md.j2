@@ -1,0 +1,56 @@
+## Ananke security patch — {{ item.repo }} / {{ item.manifest_path or "(repository)" }}
+
+| Advisory | Package | Vulnerable | Fixed in | Severity |
+|---|---|---|---|---|
+{% for f in item.findings %}
+| [{{ (f.advisory_ids[0] if f.advisory_ids else f.source_id) | md_cell }}]({{ f.url }}) | {{ f.package | md_cell }} | {{ f.vulnerable_range | md_cell }} | {{ f.fixed_version | md_cell }} | {{ f.severity }} |
+{% endfor %}
+
+### What changed
+{% if deterministic %}
+_Deterministic rung: no agent was involved._
+
+{% endif %}
+{{ result.summary }}
+
+{% for c in result.changes %}
+- {{ c }}
+{% endfor %}
+
+### Proof of work
+| Scanner | Version / DB | Before | After | Resolved | Introduced |
+|---|---|---|---|---|---|
+{% for name, d in evidence.delta.items() %}
+| {{ name }} | {{ evidence.after[name].scanner_version }} / {{ evidence.after[name].db_version or "n/a" }} | {{ evidence.before[name].findings | length }} | {{ evidence.after[name].findings | length }} | {{ d.resolved | length }} | {{ d.introduced | length }} |
+{% endfor %}
+
+{% for name, d in evidence.delta.items() if d.introduced %}
+> ⚠ `{{ name }}` reports {{ d.introduced | length }} new finding(s) ({{ d.introduced | map(attribute="id") | join(", ") }}); see risk notes.
+
+{% endfor %}
+{% for w in db_warnings %}
+> ⚠ {{ w }}
+
+{% endfor %}
+- Tests: `{{ repo_cfg.test_command or "n/a" }}` → {{ evidence.verify.tests.status }} (log tail below)
+- Diff: {{ evidence.verify.diff_size.lines }} lines across {{ evidence.verify.diff_size.files }} files
+- Rung: {{ run.rung }} (attempt {{ run.attempt }}), tokens {{ run.tokens_in }}/{{ run.tokens_out }}
+
+### Risk notes
+{{ result.risk_notes }}
+
+### Release notes consulted
+{% for n in evidence.release_notes %}
+- {{ n }}
+{% else %}
+- None.
+{% endfor %}
+
+<details><summary>Test output</summary>
+
+```
+{{ evidence.verify.tests.tail }}
+```
+</details>
+
+_Opened by Ananke run `{{ run.run_id }}`. Review and merge; Ananke never merges on its own unless auto-merge policy is enabled for patch-level bumps._

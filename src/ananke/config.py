@@ -94,14 +94,18 @@ class TrivyConfig(_Section):
     scanners: list[str] = Field(default_factory=lambda: ["vuln", "misconfig", "secret"])
     ignore_unfixed: bool = True
     image_mode: bool = False
+    cache_dir: ConfigPath | None = None  # --cache-dir (vulnerability DB location)
+    timeout_s: int | None = Field(None, gt=0)  # None = the scanner's built-in default
 
 
 class OsvConfig(_Section):
     offline: bool = True
+    timeout_s: int | None = Field(None, gt=0)
 
 
 class GitleaksConfig(_Section):
-    pass
+    config: ConfigPath | None = None  # custom gitleaks.toml rules (--config)
+    timeout_s: int | None = Field(None, gt=0)
 
 
 class ScannersConfig(_Section):
@@ -116,9 +120,11 @@ class ScannersConfig(_Section):
     gitleaks: GitleaksConfig = Field(default_factory=GitleaksConfig)
 
     def options_for(self, name: str) -> dict[str, Any]:
-        """Options dict for scanner `name` (`scanners.<name>`), {} if none configured."""
+        """Options dict for scanner `name` (`scanners.<name>`), {} if none configured.
+
+        Unset optional fields (None) are omitted so scanners fall back to their defaults."""
         if name in type(self).model_fields and isinstance(getattr(self, name), BaseModel):
-            return getattr(self, name).model_dump()
+            return getattr(self, name).model_dump(exclude_none=True)
         extra = (self.model_extra or {}).get(name)
         return dict(extra) if isinstance(extra, dict) else {}
 
@@ -196,11 +202,15 @@ DEFAULT_NETWORK_ALLOWLIST = [
 
 class SandboxConfig(_Section):
     image: str = "ghcr.io/renci/ananke-worker:latest"
+    # Docker network must be `none` or a host-managed network with only the allowlisted egress.
+    network: str = "none"
     network_allowlist: list[str] = Field(default_factory=lambda: list(DEFAULT_NETWORK_ALLOWLIST))
     cpu: float = Field(2, gt=0)
     memory: str = "4g"
     scanner_db_volume: ConfigPath = Path("~/ananke-scanner-db")
     allow_local: bool = False  # permit the non-isolated LocalSandbox (dev/test only, §15)
+    # Allow Docker's unrestricted `bridge`/`host` networks (integration tests only; see TRUST.md).
+    allow_unrestricted_network: bool = False
 
 
 class NotifyConfig(_Section):

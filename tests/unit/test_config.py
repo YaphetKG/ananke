@@ -149,3 +149,36 @@ def test_front_matter_defaults_and_missing():
     with pytest.raises(ConfigError) as ei:
         parse_repo_workflow("---\ntests: sometimes\n---\n")
     assert ei.value.problems[0][0] == "tests"
+
+
+def test_scanner_paths_and_timeouts_reach_options(tmp_path: Path):
+    p = tmp_path / "ananke.yaml"
+    p.write_text(
+        "scanners:\n"
+        "  trivy: {cache_dir: db/trivy, timeout_s: 120}\n"
+        "  osv: {timeout_s: 60}\n"
+        "  gitleaks: {config: rules/gitleaks.toml, timeout_s: 30}\n"
+    )
+    cfg = load_config(p)
+    assert cfg.unknown_keys == []
+    base = p.parent.resolve()
+    trivy = cfg.scanners.options_for("trivy")
+    assert trivy["cache_dir"] == base / "db" / "trivy"
+    assert trivy["timeout_s"] == 120
+    assert cfg.scanners.options_for("osv") == {"offline": True, "timeout_s": 60}
+    assert cfg.scanners.options_for("gitleaks") == {
+        "config": base / "rules" / "gitleaks.toml",
+        "timeout_s": 30,
+    }
+    # unset optional fields are omitted so scanners keep their built-in defaults
+    default = config_from_dict({})
+    assert default.scanners.options_for("gitleaks") == {}
+    assert "timeout_s" not in default.scanners.options_for("trivy")
+
+
+def test_scanner_timeout_must_be_positive(tmp_path: Path):
+    p = tmp_path / "ananke.yaml"
+    p.write_text("scanners:\n  trivy: {timeout_s: 0}\n")
+    with pytest.raises(ConfigError) as exc:
+        load_config(p)
+    assert "scanners.trivy.timeout_s" in str(exc.value)
