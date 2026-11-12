@@ -23,7 +23,10 @@ FindingSource = Literal["github_dependabot", "github_code_scanning", "osv", "tri
 FindingState = Literal["open", "fixed", "dismissed", "unknown"]
 WorkItemState = Literal["todo", "in_review", "declined", "done"]
 Rung = Literal["deterministic", "agent"]
-RunOutcome = Literal["pr_opened", "verify_failed", "agent_failed", "stalled", "no_change", "error"]
+# `dry_run`: verify passed and the PR body was rendered, but nothing was pushed (`--dry-run`).
+RunOutcome = Literal[
+    "pr_opened", "dry_run", "verify_failed", "agent_failed", "stalled", "no_change", "error"
+]
 
 BRANCH_PREFIX = "ananke/"
 

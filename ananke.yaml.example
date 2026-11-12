@@ -54,6 +54,7 @@ github:
   private_key_path: $ANANKE_GH_PRIVATE_KEY_PATH
 sandbox:
   image: ghcr.io/renci/ananke-worker:latest
+  network: ananke-egress       # host-managed Docker network restricted to network_allowlist
   network_allowlist: [pypi.org, files.pythonhosted.org, registry.npmjs.org, proxy.golang.org, github.com, api.github.com, objects.githubusercontent.com]
   cpu: 2
   memory: 4g

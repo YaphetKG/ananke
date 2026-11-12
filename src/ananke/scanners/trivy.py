@@ -122,6 +122,7 @@ class TrivyScanner:
         ver = self.version(sandbox)
         report.scanner_version = ver.tool_version
         report.db_version = ver.db_version
+        report.db_updated_at = ver.db_updated_at
         report.raw_path = str(raw_path)
         if targets:
             wanted = [_rel_target(t, workspace) for t in targets]

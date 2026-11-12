@@ -2,8 +2,8 @@
 setup_command: "uv sync --all-extras"
 test_command: "uv run pytest -q -x"
 tests: required            # required | advisory
-allowed_paths: ["src/**", "pyproject.toml", "uv.lock", "requirements*.txt"]
-protected_paths: [".github/workflows/**", "helm/**"]
+allowed_paths: ["src/**", "lib/**", "app/**", "pyproject.toml", "uv.lock", "poetry.lock", "Pipfile*", "**/requirements*.txt", "package.json", "**/package.json", "package-lock.json", "**/package-lock.json", "yarn.lock", "**/yarn.lock", "pnpm-lock.yaml", "**/pnpm-lock.yaml", "go.mod", "**/go.mod", "go.sum", "**/go.sum"]
+protected_paths: [".github/workflows/**", "helm/**", "**/*.pem", "**/*secret*"]
 max_diff_lines: 800
 reviewers: []
 hooks:

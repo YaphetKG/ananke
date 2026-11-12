@@ -202,11 +202,15 @@ DEFAULT_NETWORK_ALLOWLIST = [
 
 class SandboxConfig(_Section):
     image: str = "ghcr.io/renci/ananke-worker:latest"
+    # Docker network must be `none` or a host-managed network with only the allowlisted egress.
+    network: str = "none"
     network_allowlist: list[str] = Field(default_factory=lambda: list(DEFAULT_NETWORK_ALLOWLIST))
     cpu: float = Field(2, gt=0)
     memory: str = "4g"
     scanner_db_volume: ConfigPath = Path("~/ananke-scanner-db")
     allow_local: bool = False  # permit the non-isolated LocalSandbox (dev/test only, §15)
+    # Allow Docker's unrestricted `bridge`/`host` networks (integration tests only; see TRUST.md).
+    allow_unrestricted_network: bool = False
 
 
 class NotifyConfig(_Section):

@@ -127,3 +127,42 @@ def test_toy_scanner_registers_and_flows_through_delta(tmp_path):
     fixtures = Path(__file__).resolve().parents[1] / "fixtures" / "scanner_output" / "trivy"
     trivy = TrivyScanner().parse((fixtures / "before_py.json").read_text())
     assert any(before.findings[0].same_as(t) for t in trivy.findings)
+
+
+def test_toy_scanner_shows_in_cli_listing_and_pr_table(tmp_path):
+    """M1 acceptance: following SCANNERS.md alone, a new scanner appears in `ananke scanners`
+    and gets its own row in the PR body's proof-of-work table."""
+    from datetime import UTC, datetime
+
+    from typer.testing import CliRunner
+
+    from ananke.cli import app
+    from ananke.config import RepoWorkflowConfig
+    from ananke.model import RunRecord
+    from ananke.workflow import render_pr_body, synthetic_item
+
+    toy = ToyScanner({}, raw_dir=tmp_path)
+    registry.register(toy)
+    cfg = tmp_path / "ananke.yaml"
+    cfg.write_text("repos: [RENCI/x]\nscanners:\n  enabled: [toyscan, trivy]\n")
+    out = CliRunner().invoke(app, ["scanners", "--config", str(cfg)])
+    assert out.exit_code == 0, out.output
+    toy_row = next(line for line in out.output.splitlines() if "toyscan" in line)
+    assert "dependency" in toy_row and "True" in toy_row  # registered and enabled
+
+    ws = tmp_path / "ws"
+    ws.mkdir()
+    before, after = toy.scan(StubSandbox(BEFORE), ws), toy.scan(StubSandbox(AFTER), ws)
+    item = synthetic_item()
+    body = render_pr_body(
+        item=item,
+        result=None,
+        evidence={
+            "before": {"toyscan": before},
+            "after": {"toyscan": after},
+            "delta": {"toyscan": delta(before, after)},
+        },  # fmt: skip
+        run=RunRecord(run_id="r", item_key=item.key, started_at=datetime.now(UTC)),
+        repo_cfg=RepoWorkflowConfig(),
+    )
+    assert "| toyscan | toyscan 1.0.0 / n/a | 1 | 0 | 1 | 0 |" in body

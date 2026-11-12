@@ -13,6 +13,7 @@ The raw report on disk does contain the secret; it lives in raw_dir, outside the
 from __future__ import annotations
 
 import json
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -75,17 +76,29 @@ class GitleaksScanner:
         return cmd
 
     def _run_one(self, sandbox: Sandbox, workspace: Path, path: Path) -> tuple[Path, str]:
-        report_path = _raw_path(self.raw_dir, self.name)
-        _check_raw_dir(report_path.parent, workspace, self.name)
+        raw_path = _raw_path(self.raw_dir, self.name)
+        _check_raw_dir(raw_path.parent, workspace, self.name)
         timeout = self.options.get("timeout_s", DEFAULT_TIMEOUT_S)
+        isolated = bool(getattr(sandbox, "is_isolated", False))
+        report_path = (
+            Path("/tmp") / f"ananke-gitleaks-{uuid.uuid4().hex}.json" if isolated else raw_path
+        )
         res = sandbox.run(self.command(path, report_path), cwd=workspace, timeout_s=timeout)
         if res.exit_code not in SUCCESS_EXIT_CODES:
             raise ScannerError(
                 self.name, f"exit {res.exit_code}: {_tail(res.stderr)}", exit_code=res.exit_code
             )
-        if not report_path.is_file():
-            raise ScannerError(self.name, f"no report written to {report_path}")
-        return report_path, report_path.read_text(encoding="utf-8")
+        if isolated:
+            copy_file = getattr(sandbox, "copy_file_from", None)
+            if copy_file is None:
+                raise ScannerError(self.name, "isolated sandbox cannot retrieve the raw report")
+            try:
+                copy_file(report_path, raw_path)
+            finally:
+                sandbox.run(["rm", "-f", str(report_path)], cwd=workspace, timeout_s=30)
+        if not raw_path.is_file():
+            raise ScannerError(self.name, f"no report written to {raw_path}")
+        return raw_path, raw_path.read_text(encoding="utf-8")
 
     def scan(
         self, sandbox: Sandbox, workspace: Path, targets: list[Path] | None = None

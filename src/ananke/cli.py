@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import sys
 from pathlib import Path
@@ -30,6 +31,18 @@ FixturesOption = typer.Option(
     "--fixtures",
     help="Read recorded Dependabot alerts from DIR/dependabot_alerts/open.json for every "
     "configured repo instead of calling GitHub (no credentials needed).",
+    file_okay=False,
+)
+
+
+FakeModelOption = typer.Option(
+    None, "--fake-model", help="Drive the agent rung with a scripted fake model (offline)."
+)
+
+RunFixturesOption = typer.Option(
+    None,
+    "--fixtures",
+    help="Read Dependabot alerts from DIR/dependabot_alerts/open.json instead of GitHub.",
     file_okay=False,
 )
 
@@ -139,10 +152,115 @@ def scanners(config: Path = ConfigOption) -> None:
         raise typer.Exit(1)
 
 
+def _find_item(items: list, item_key: str):
+    return next(
+        (i for i in items if i.key == item_key or i.branch.removeprefix("ananke/") == item_key),
+        None,
+    )
+
+
 @app.command()
-def run() -> None:
-    """Run one work item end to end (M1)."""
-    _not_implemented("run")
+def run(
+    item_key: str,
+    config: Path = ConfigOption,
+    dry_run: bool = typer.Option(
+        False, "--dry-run", help="Patch and verify locally, print the PR body, push nothing."
+    ),
+    yes: bool = typer.Option(False, "--yes", help="Confirm pushing the branch and opening the PR."),
+    fake_model: Path | None = FakeModelOption,
+    fixtures: Path | None = RunFixturesOption,
+    clone_url: str | None = typer.Option(
+        None, "--clone-url", help="Clone from this URL or path instead of the GitHub repo."
+    ),
+    default_branch: str | None = typer.Option(
+        None, "--default-branch", help="Base branch (default: the repo's default branch)."
+    ),
+) -> None:
+    """Run one work item: deterministic fix, verify, then (if it passes) branch + PR."""
+    if not dry_run and not yes:
+        typer.echo("writing a branch and pull request requires --yes (or use --dry-run)", err=True)
+        raise typer.Exit(2)
+    if fixtures is not None and clone_url is None:
+        typer.echo("--fixtures needs --clone-url (there is no GitHub repo to clone)", err=True)
+        raise typer.Exit(2)
+    from ananke.orchestrator.store import RunStore
+    from ananke.scanners import build_scanners, default_raw_dir
+    from ananke.worker.graph import RunContext, run_item
+
+    cfg = _load(config)
+    try:
+        if fixtures is not None:
+            item, url, branch, auth, token = _item_from_fixtures(cfg, fixtures, item_key)
+        else:
+            item, url, branch, auth, token = asyncio.run(_item_from_github(cfg, item_key))
+        ctx = RunContext(
+            cfg=cfg,
+            clone_url=clone_url or url,
+            default_branch=default_branch or branch,
+            scanners=build_scanners(cfg.scanners, raw_dir=default_raw_dir()),
+            dry_run=dry_run,
+            fake_model=fake_model,
+            github_auth=auth,
+            github_token=token,
+            store=RunStore.for_config(cfg),
+        )
+        result = run_item(ctx, item)
+    except Exception as exc:
+        typer.echo(f"ananke run: {exc}", err=True)
+        raise typer.Exit(1) from None
+    outcome = result.get("outcome", "error")
+    if result.get("body"):
+        typer.echo(result["body"])
+    verify = result.get("verify")
+    if verify is not None and not verify.passed:
+        typer.echo("verify failed:", err=True)
+        for line in verify.failures():
+            typer.echo(f"  {line}", err=True)
+    if result.get("error"):
+        typer.echo(f"error: {result['error']}", err=True)
+    typer.echo(
+        f"outcome={outcome} item={item.key} run={ctx.run_id} pr={result.get('pr_number', '-')}"
+    )
+    raise typer.Exit(0 if outcome in ("pr_opened", "dry_run") else 1)
+
+
+def _item_from_fixtures(cfg: AnankeConfig, fixtures: Path, item_key: str):
+    from ananke.orchestrator.scan import load_fixture_findings
+    from ananke.orchestrator.triage import triage
+
+    findings, errors = load_fixture_findings(cfg, fixtures)
+    if errors:
+        raise ValueError("; ".join(f"{repo}: {msg}" for repo, msg in errors.items()))
+    item = _find_item(triage(findings, cfg, pulls_by_repo={}).items, item_key)
+    if item is None:
+        raise ValueError(f"work item not found or not eligible: {item_key}")
+    return item, "", None, None, None
+
+
+async def _item_from_github(cfg: AnankeConfig, item_key: str):
+    from ananke.github.auth import GitHubAuth
+    from ananke.github.client import GitHubClient
+    from ananke.orchestrator.scan import fetch_ananke_pulls
+    from ananke.orchestrator.triage import triage
+    from ananke.sources.github_dependabot import DependabotSource
+
+    if "github_dependabot" not in cfg.sources:
+        raise ValueError("ananke run needs github_dependabot in sources (or use --fixtures)")
+    auth = GitHubAuth.from_config(cfg.github)
+    async with GitHubClient(auth, api_url=cfg.github.api_url) as client:
+        source = DependabotSource(client)
+        findings, pulls_by_repo, repo_info = [], {}, {}
+        for repo in cfg.repos:
+            findings.extend(await source.fetch_open(repo))
+            pulls_by_repo[repo] = await fetch_ananke_pulls(client, repo)
+            repo_info[repo] = await client.get(f"/repos/{repo}")
+        item = _find_item(triage(findings, cfg, pulls_by_repo=pulls_by_repo).items, item_key)
+        if item is None:
+            raise ValueError(f"work item not found or not eligible: {item_key}")
+        info = repo_info[item.repo]
+        url = str(info.get("clone_url") or f"https://github.com/{item.repo}.git")
+        branch = str(info.get("default_branch") or "") or None
+        return item, url, branch, auth, await auth.token()
 
 
 @app.command()

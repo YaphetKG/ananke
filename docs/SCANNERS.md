@@ -118,3 +118,35 @@ osv-scanner scan --format json [--offline] --lockfile <t1> --lockfile <t2>   # w
 gitleaks dir <path> --report-format json --report-path <raw_dir>/<file>.json \
     --no-banner --exit-code 1 [--config <scanners.gitleaks.config>]       # success: exit 0 or 1
 ```
+
+## Worker image and database
+
+M1 builds the pinned scanner tools from their official releases in
+[`docker/worker.Dockerfile`](../docker/worker.Dockerfile). The pinned versions match the schemas the
+parse fixtures follow (Trivy 0.76.2, OSV-Scanner 2.7.1, gitleaks 8.30.1). Vulnerability databases
+are baked into the image so runs are reproducible and need no database egress:
+
+- Trivy's database lives under `/opt/ananke/cache/trivy`, and runs use `--skip-db-update`.
+- OSV-Scanner's offline databases for PyPI, npm and Go live under `/opt/ananke/cache/osv-scanner`
+  (`OSV_SCANNER_LOCAL_DB_CACHE_DIRECTORY`). Runs use `--offline`.
+
+A configured, non-empty `sandbox.scanner_db_volume` holding Trivy's `trivy.db` and
+`metadata.json` replaces the baked Trivy database read-only. Keep that directory populated from a
+trusted refresh process (PLAN.md M4). Ananke does not update scanner databases during a work item.
+
+Raw reports are stored outside the checkout. Trivy and OSV return JSON on stdout. For gitleaks,
+the host copies a transient report from the container to the host raw directory and removes the
+container copy before agent tools run. Raw reports may contain secret material and are never
+mounted into the agent container.
+
+For outbound package access, `sandbox.network` must name a Docker network protected by a host
+firewall or egress proxy that applies `sandbox.network_allowlist`. Standard Docker bridge
+networking is unrestricted and does not satisfy this requirement. See [`TRUST.md`](TRUST.md).
+
+## How the verify gate uses scanners
+
+`targets_resolved` asks every enabled scanner whose `kinds` include `dependency` and whose
+`ecosystems` include the finding's ecosystem (or `*`) whether the finding is still present after
+the change. A covering scanner that reports nothing counts as clean. A finding that no enabled
+scanner covers fails the check, so enable at least one dependency scanner for each ecosystem you
+patch. `no_secrets` reads `introduced` findings of kind `secret` from every scanner.
