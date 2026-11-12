@@ -10,9 +10,14 @@ scanners:
     scanners: [vuln, misconfig, secret]
     ignore_unfixed: true
     image_mode: false                       # M5: trivy image on built images
+    # cache_dir: ~/ananke-scanner-db/trivy  # optional --cache-dir; relative to this file
+    # timeout_s: 1800                       # optional per-scanner timeout in seconds
   osv:
     offline: true
+    # timeout_s: 1800
   gitleaks: {}
+    # config: gitleaks.toml                 # optional custom rules; relative to this file
+    # timeout_s: 900                        # gitleaks default; trivy/osv default 1800
 polling:
   interval_s: 600
 workspace:

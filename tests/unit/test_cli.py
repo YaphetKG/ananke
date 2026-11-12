@@ -29,7 +29,7 @@ def test_validate_missing_file(tmp_path: Path):
     assert result.exit_code == 1
 
 
-@pytest.mark.parametrize("cmd", ["scan", "scanners", "run", "daemon", "status"])
+@pytest.mark.parametrize("cmd", ["run", "daemon", "status"])
 def test_placeholders(cmd):
     result = runner.invoke(app, [cmd])
     assert result.exit_code == 2

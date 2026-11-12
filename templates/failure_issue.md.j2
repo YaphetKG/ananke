@@ -1,0 +1,53 @@
+Ananke tried to patch the security findings below in `{{ item.repo }}` / `{{ item.manifest_path or "(repository)" }}` and gave up after {{ attempts }} attempt(s). No pull request was opened. This item is now in cooldown.
+
+### Findings
+
+{{ item.findings | findings_table }}
+
+### What Ananke tried
+
+| Attempt | Rung | Outcome | Run |
+|---|---|---|---|
+{% for r in runs %}
+| {{ r.attempt }} | {{ r.rung }} | {{ r.outcome or "n/a" }} | `{{ r.run_id }}` |
+{% endfor %}
+
+{% if evidence.deterministic %}
+Deterministic rung: {{ evidence.deterministic.summary | default("version bump and lockfile regeneration attempted", true) }}
+{% for c in evidence.deterministic.changes | default([], true) %}
+- {{ c }}
+{% endfor %}
+
+{% endif %}
+### Last error
+
+```
+{{ error }}
+```
+
+### Verify results (last attempt)
+
+{% if verify_rows %}
+| Check | Status | Detail |
+|---|---|---|
+{% for v in verify_rows %}
+| {{ v.name }} | {{ v.status }} | {{ v.detail }} |
+{% endfor %}
+{% else %}
+Verify did not run.
+{% endif %}
+
+{% if evidence.verify.tests.tail %}
+<details><summary>Test output</summary>
+
+```
+{{ evidence.verify.tests.tail }}
+```
+</details>
+
+{% endif %}
+### How to retry
+
+If the blocker is resolved (or you want another attempt anyway), add the label `{{ retry_label }}` to this issue or to the closed Ananke pull request. Ananke will pick the item up again on its next poll.
+
+_Opened by Ananke run `{{ run.run_id }}` ({{ run.rung }} rung, attempt {{ run.attempt }}, tokens {{ run.tokens_in }}/{{ run.tokens_out }})._
